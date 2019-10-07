@@ -162,7 +162,7 @@ nohup dipperin --node_type 2 --soft_wallet_pwd 123 --data_dir %v --http_port 100
 nohup dipperin --node_type 2 --soft_wallet_pwd 123 --data_dir %v --http_port 10005 --ws_port 10006 --p2p_listener 20003 >> %v &
 nohup dipperin --node_type 2 --soft_wallet_pwd 123 --data_dir %v --http_port 10007 --ws_port 10008 --p2p_listener 20004 >> %v &
 
-nohup dipperin --node_type 1 --soft_wallet_pwd 123 --data_dir %v --http_port 10010 --ws_port 10011 --p2p_listener 20010 >> %v &
+nohup dipperin --node_type 1 --soft_wallet_pwd 123 --data_dir %v --is_start_mine 1 --http_port 10010 --ws_port 10011 --p2p_listener 20010 >> %v &
 `, b0keyfile, filepath.Join(b0Dir, "out.log"),
 			vDataDirs[0], filepath.Join(vDataDirs[0], "out.log"),
 			vDataDirs[1], filepath.Join(vDataDirs[1], "out.log"),
@@ -171,6 +171,14 @@ nohup dipperin --node_type 1 --soft_wallet_pwd 123 --data_dir %v --http_port 100
 				m0DataDir, filepath.Join(m0DataDir, "out.log"))
 
 		if err := ioutil.WriteFile(filepath.Join(wDir, "start_nodes.sh"), []byte(startsh), 0744); err != nil {
+			panic(err)
+		}
+
+		stopsh := `
+ps aux|grep bootnode|awk '{print $2}'|xargs kill -9
+ps aux|grep dipperin|awk '{print $2}'|xargs kill -9
+`
+		if err := ioutil.WriteFile(filepath.Join(wDir, "stop_nodes.sh"), []byte(stopsh), 0744); err != nil {
 			panic(err)
 		}
 	}
