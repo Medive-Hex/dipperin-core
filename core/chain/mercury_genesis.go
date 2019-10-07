@@ -458,6 +458,7 @@ func DefaultGenesisBlock(chainDB chaindb.Database, accountStateProcessor state_p
 	if mGenesis := GenesisBlockFromFile(chainDB, accountStateProcessor); mGenesis != nil {
 		mGenesis.GasLimit = chain_config.BlockGasLimit
 		mGenesis.RegisterProcessor = registerProcessor
+		VerifierAddress = mGenesis.Verifiers
 		return mGenesis
 	}
 
